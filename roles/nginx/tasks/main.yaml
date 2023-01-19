@@ -1,0 +1,15 @@
+---
+- name: Ensure nginx is installed
+  package: name=nginx
+
+- name: Disable default conf
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Restart nginx
+
+- name: Copy services conf
+  copy:
+    src: services.conf
+    dest: /etc/nginx/conf.d/services.conf
+  notify: Restart nginx

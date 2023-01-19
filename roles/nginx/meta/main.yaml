@@ -1,0 +1,11 @@
+galaxy_info:
+  author: Ítalo Vieira
+  description: Setup nginx as reverse proxy for local services
+
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  galaxy_tags: []
+
+dependencies: []
