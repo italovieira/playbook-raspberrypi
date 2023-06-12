@@ -1,0 +1,5 @@
+---
+pihole_timezone: America/Recife
+pihole_dns: 172.29.0.1#5335;9.9.9.9
+pihole_dnssec: no
+pihole_custom_cache_size: 0

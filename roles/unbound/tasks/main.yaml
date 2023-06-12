@@ -1,0 +1,41 @@
+---
+- name: Ensure unbound is installed
+  apt:
+    name: unbound
+    state: present
+    update_cache: yes
+
+- name: Copy pihole configuration
+  copy:
+    src: etc/unbound/unbound.conf.d/pihole.conf
+    dest: /etc/unbound/unbound.conf.d/pihole.conf
+  notify: Restart unbound service
+
+  # https://docs.pi-hole.net/guides/dns/unbound/#disable-resolvconfconf-entry-for-unbound-required-for-debian-bullseye-releases
+- name: Disable unbound-resolvconf
+  block:
+  - name: Disable unbound-resolvconf service
+    service:
+      name: unbound-resolvconf
+      enabled: no
+      state: stopped
+
+  - name: Ensure resolvconf_resolvers.conf is not generated
+    lineinfile:
+      path: /etc/resolvconf.conf
+      regexp: ^unbound=.*
+      line: '#\g<0>'
+      backrefs: yes
+
+  - name: Remove resolvconf_resolvers.conf file if it exists
+    file:
+      path: /etc/unbound/unbound.conf.d/resolvconf_resolvers.conf
+      state: absent
+
+  notify: Restart unbound service
+
+- name: Ensure pihole service is enabled and started
+  service:
+    name: unbound
+    enabled: yes
+    state: started

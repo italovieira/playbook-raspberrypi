@@ -1,0 +1,13 @@
+---
+version: '3'
+
+services:
+  pihole:
+    networks: [static]
+
+networks:
+  static:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.29.0.0/16

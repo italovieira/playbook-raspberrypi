@@ -1,8 +1,18 @@
 ---
-- name: Ensure docker-compose.yaml is present
-  copy:
-    src: docker-compose.yaml
-    dest: docker/containers/pihole/
+- name: Create docker compose project directory
+  file:
+    path: docker/containers/pihole
+    state: directory
+
+- name: Ensure docker-compose.yaml and docker-compose.override.yaml is present
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  loop:
+    - src: docker-compose.yaml.j2
+      dest: docker/containers/pihole/docker-compose.yaml
+    - src: docker-compose.override.yaml.j2
+      dest: docker/containers/pihole/docker-compose.override.yaml
 
 - name: Run pihole container
   docker_compose:

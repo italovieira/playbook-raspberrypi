@@ -2,7 +2,16 @@
 - hosts: servers
   become: true
 
+  vars:
+    # See https://github.com/pi-hole/docker-pi-hole/tree/2023.05.2#readme
+    pihole_timezone: America/Recife
+    pihole_webpassword: !vault
+    pihole_dns: 172.29.0.1#5335;9.9.9.9
+    pihole_dnssec: no
+    pihole_custom_cache_size: 0
+
   roles:
     - docker
     - pihole
     - nginx
+    - unbound
