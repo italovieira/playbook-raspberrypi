@@ -12,12 +12,15 @@ services:
       - 127.0.0.1:8001:80/tcp
     environment:
       TZ: {{ pihole_timezone }}
-{% if pihole_webpassword is defined %}
+{% if pihole_webpassword is defined and pihole_webpassword is not none %}
       WEBPASSWORD: {{ pihole_webpassword }}
 {% endif %}
       PIHOLE_DNS_: {{ pihole_dns }}
       DNSSEC: '{{ pihole_dnssec | ternary('true', 'false') }}'
       CUSTOM_CACHE_SIZE: {{ pihole_custom_cache_size }}
+{% if pihole_cors_hosts is defined and pihole_cors_hosts is not none %}
+      CORS_HOSTS: {{ pihole_cors_hosts }}
+{% endif %}
     volumes:
       - ./etc-pihole:/etc/pihole
       - ./etc-dnsmasq.d:/etc/dnsmasq.d
